@@ -27,6 +27,7 @@ import com.klikli_dev.occultism.common.entity.familiar.*;
 import com.klikli_dev.occultism.common.entity.possessed.*;
 import com.klikli_dev.occultism.common.entity.possessed.horde.*;
 import com.klikli_dev.occultism.common.entity.spirit.*;
+import com.klikli_dev.occultism.common.entity.spirit.demonicpartner.charmer.DemonicCharmer;
 import com.klikli_dev.occultism.common.entity.spirit.demonicpartner.husband.DemonicHusband;
 import com.klikli_dev.occultism.common.entity.spirit.demonicpartner.wife.DemonicWife;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -493,4 +494,5 @@ public class OccultismEntities {
 
     public static final Supplier<EntityType<DemonicWife>> DEMONIC_WIFE = ENTITIES.register(DemonicWife.ID.getPath(), DemonicWife.ENTITY_TYPE::get);
     public static final Supplier<EntityType<DemonicHusband>> DEMONIC_HUSBAND = ENTITIES.register(DemonicHusband.ID.getPath(), DemonicHusband.ENTITY_TYPE::get);
+    public static final Supplier<EntityType<DemonicCharmer>> DEMONIC_CHARMER = ENTITIES.register(DemonicCharmer.ID.getPath(), DemonicCharmer.ENTITY_TYPE::get);
 }
