@@ -1547,6 +1547,27 @@ public class ENUSProvider extends AbstractModonomiconLanguageProvider {
         helper.page("ritual");
         //no text
 
+        helper.entry("craft_catalyst_crystal");
+        this.add(helper.entryName(), "Catalyst Crystal");
+
+        helper.page("spotlight");
+        this.add(helper.pageText(),
+                """
+                        Catalyst Crystals utilize the weaker nature of fragile soul gems infused with magic absorbing items, which upon being infused by a [#](%1$s)Djinni[#]() allows the unleashing of a demonic beings full essence.
+                        """.formatted(COLOR_PURPLE));
+
+        helper.page("usage");
+        this.add(helper.pageTitle(), "Usage");
+        this.add(helper.pageText(),
+                """
+                        The gem requires charging with a powerful entities essence, preferably one with a close attachment to the magician. \\
+                        [#](%1$s)Right-click[#]() such entity to give them the gem, most beings from the Other Place will know what to do from there.
+                        """.formatted(COLOR_PURPLE));
+
+
+        helper.page("ritual");
+        //no text
+
         helper.entry("craft_familiar_ring");
         this.add(helper.entryName(), "Familiar Ring");
 
@@ -2567,6 +2588,7 @@ public class ENUSProvider extends AbstractModonomiconLanguageProvider {
         this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_RITUAL_SATCHEL_T2, "Craft Artisanal Ritual Satchel", "Afrit", "Binds an Afrit into a satchel to build pentacles all at once for the summoner.");
         this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_FRAGILE_SOUL_GEM, "Craft Fragile Soul Gem", "Foliot", "The Fragile Soul Gem allows the temporary storage of living beings. It can only be used once.");
         this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_SOUL_GEM, "Craft Soul Gem", "Djinni", "The Soul Gem allows the temporary storage of living beings.");
+        this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_CATALYST_CRYSTAL, "Craft Catalyst Crystal", "Djinni", "The catalyst crystal is used to unleash the full essence of a bound demonic partner, this also makes them unbound and may require combat to properly finish");
         this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_FAMILIAR_RING, "Craft Familiar Ring", "Djinni", "The Familiar Ring allows to store familiars. The ring will apply the familiar effect to the wearer.");
         this.autoDummyFactory(OccultismItems.RITUAL_DUMMY_CRAFT_TRUE_SIGHT_STAFF, "Craft True Sight Staff", "Marid", "The true sight staff give abilities to find, see and interact with the otherworld.");
             //Miners

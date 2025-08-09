@@ -11,15 +11,13 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -47,7 +45,6 @@ import java.util.Optional;
 public class DemonicPartner extends TamableAnimal {
 
     private static final EntityDataAccessor<Boolean> IS_LYING = SynchedEntityData.defineId(DemonicPartner.class, EntityDataSerializers.BOOLEAN);
-    protected Optional<RecipeHolder<SmokingRecipe>> lastRecipe = Optional.empty();
 
     protected DemonicPartner(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -108,10 +105,12 @@ public class DemonicPartner extends TamableAnimal {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(3, new DemonicPartnerLieNextToPartnerGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 5.0F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.7D, true));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new DemonicPartnerEnchantItem(this, UniformFloat.of(2,4)));
+        this.goalSelector.addGoal(11, new DemonicPartnerLieNextToPartnerGoal(this));
+        this.goalSelector.addGoal(12, new DemonicPartnerCookItem(this, UniformFloat.of(2,5)));
+        this.goalSelector.addGoal(13, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -177,39 +176,7 @@ public class DemonicPartner extends TamableAnimal {
                 return InteractionResult.SUCCESS;
             }
 
-            //cook raw food
-            var recipe = this.lastRecipe.isPresent() ? this.lastRecipe.get().value().ingredient.test(itemstack) ? this.lastRecipe : this.getRecipe(itemstack) : this.getRecipe(itemstack);
-            if (recipe.isPresent()) {
-                this.lastRecipe = recipe;
-                var result = recipe.get().value().getResultItem(this.level().registryAccess());
-
-                if (pPlayer.isShiftKeyDown()) 
-                {
-                    var multiResult = result.copy();
-                    multiResult.setCount(result.getCount() * itemstack.getCount());
-
-                    if (!pPlayer.isCreative()) {
-                        itemstack.shrink(itemstack.getCount());
-                    }
-                    ItemHandlerHelper.giveItemToPlayer(pPlayer, multiResult);
-                }
-                else
-                {
-                    if (!pPlayer.isCreative()) {
-                        itemstack.shrink(1);
-                    }
-                    ItemHandlerHelper.giveItemToPlayer(pPlayer, result);
-                }
-
-                for (int i = 0; i < 2; i++) {
-                    Vec3 pos = this.position().add((this.getRandom().nextFloat() - 0.5f) * 0.7,
-                            1.5 + (this.getRandom().nextFloat() - 0.5f) * 0.7, (this.getRandom().nextFloat() - 0.5f) * 0.7);
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
-                }
-
-
-                return InteractionResult.SUCCESS;
-            }
+            //cooking has been moved to the DemonicPartnerCookItem goal.
 
             //heal with food
             if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
@@ -220,6 +187,22 @@ public class DemonicPartner extends TamableAnimal {
 
                 this.gameEvent(GameEvent.EAT, this);
                 return InteractionResult.SUCCESS;
+            } else if (!itemstack.isEmpty()) // This is actually the only thing needed for cooking items or even giving your companion equipment
+            {
+                ItemStack currentHeldItem = this.getMainHandItem();
+                boolean equipSuccessful = !this.equipItemIfPossible(itemstack).isEmpty();
+                if (equipSuccessful){
+                    if (!pPlayer.isCreative()) {
+                        itemstack.shrink(1);
+                    }
+                    this.gameEvent(GameEvent.EQUIP,this);
+                    if (!currentHeldItem.isEmpty())
+                    {
+                        this.gameEvent(GameEvent.UNEQUIP,this);
+                        this.dropItem(currentHeldItem);
+                        this.setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
+                    }
+                }
             }
 
             //sit/stand
@@ -252,6 +235,15 @@ public class DemonicPartner extends TamableAnimal {
             return InteractionResult.SUCCESS;
         } else {
             return super.mobInteract(pPlayer, pHand);
+        }
+    }
+    public void dropItem(ItemStack stack) {
+        Level level = this.level();
+        Vec3 dropPos = this.position();
+        if (!level.isClientSide && !stack.isEmpty()) {
+            ItemEntity itemEntity = new ItemEntity(level, dropPos.x, dropPos.y, dropPos.z, stack.copy());
+            itemEntity.setPickUpDelay(10);
+            level.addFreshEntity(itemEntity);
         }
     }
 

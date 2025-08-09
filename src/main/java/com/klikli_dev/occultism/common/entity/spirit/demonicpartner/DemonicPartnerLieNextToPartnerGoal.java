@@ -6,6 +6,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -121,8 +123,11 @@ public class DemonicPartnerLieNextToPartnerGoal extends Goal {
         this.entity.setLying(false);
         float f = this.entity.level().getTimeOfDay(1.0F);
         if (this.ownerPlayer.getSleepTimer() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.entity.level().getRandom().nextFloat() < 0.7D) {
-//            this.giveMorningGift();
+            this.giveMorningGift();
         }
+        LivingEntity livingEntity = this.entity.getOwner();
+        if (livingEntity != null)
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION,260,2,false,false,false));
 
         this.entity.getNavigation().stop();
     }

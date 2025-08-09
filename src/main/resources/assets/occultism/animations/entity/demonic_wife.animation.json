@@ -303,6 +303,44 @@
 					}
 				}
 			}
+		},
+		"use_item": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"_": {
+					"position": [0, -8, 0]
+				},
+				"right_arm": {
+					"rotation": [-50.41784, 5.4302, 0.59708]
+				},
+				"bone8": {
+					"rotation": [0, 0, -19]
+				},
+				"left_arm": {
+					"rotation": [-51.49697, 0.23463, 1.48154]
+				},
+				"left_leg": {
+					"rotation": [18.04111, 3.80393, 1.23789],
+					"position": [0, -0.6, 0]
+				},
+				"bone": {
+					"rotation": [-41.68163, 9.40134, -8.27535],
+					"position": [0, -1.5, 0]
+				},
+				"bone2": {
+					"rotation": [0, 8, 0]
+				},
+				"bone3": {
+					"position": [0, -0.2, 0]
+				},
+				"bone6": {
+					"rotation": [0, 0, 25]
+				},
+				"head": {
+					"rotation": [35, 0, 0]
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

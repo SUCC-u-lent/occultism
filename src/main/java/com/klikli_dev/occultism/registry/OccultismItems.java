@@ -90,6 +90,8 @@ public class OccultismItems {
             () -> new SoulGemItem(defaultProperties().stacksTo(1)));
     public static final DeferredItem<SoulGemItem> SOUL_GEM_ITEM = ITEMS.register("soul_gem",
             () -> new SoulGemItem(defaultProperties().stacksTo(1)));
+    public static final DeferredItem<CatalystCrystal> CATALYST_CRYSTAL_ITEM = ITEMS.register("catalyst_crystal",
+            () -> new CatalystCrystal(defaultProperties().stacksTo(1)));
     public static final DeferredItem<SoulGemItem> TRINITY_GEM_ITEM = ITEMS.register("trinity_gem",
             () -> new SoulGemItem(defaultProperties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<Item> FAMILIAR_RING = ITEMS.register("familiar_ring",
@@ -601,6 +603,7 @@ public class OccultismItems {
     public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_RITUAL_SATCHEL_T2 = ITEMS.register("ritual_dummy/craft_ritual_satchel_t2", () -> new DummyTooltipItem(defaultProperties()));
     public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_FRAGILE_SOUL_GEM = ITEMS.register("ritual_dummy/craft_fragile_soul_gem", () -> new DummyTooltipItem(defaultProperties()));
     public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_SOUL_GEM = ITEMS.register("ritual_dummy/craft_soul_gem", () -> new DummyTooltipItem(defaultProperties()));
+    public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_CATALYST_CRYSTAL = ITEMS.register("ritual_dummy/craft_catalyst_crystal", () -> new DummyTooltipItem(defaultProperties()));
     public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_FAMILIAR_RING = ITEMS.register("ritual_dummy/craft_familiar_ring", () -> new DummyTooltipItem(defaultProperties()));
     public static final DeferredItem<Item> RITUAL_DUMMY_CRAFT_TRUE_SIGHT_STAFF = ITEMS.register("ritual_dummy/craft_true_sight_staff", () -> new DummyTooltipItem(defaultProperties()));
             //Miners

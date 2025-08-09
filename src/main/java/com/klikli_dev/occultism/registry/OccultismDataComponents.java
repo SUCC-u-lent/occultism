@@ -216,4 +216,10 @@ public class OccultismDataComponents {
             .networkSynchronized(ByteBufCodecs.INT)
             .cacheEncoding()
     );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> CATALYST_CRYSTAL_CHARGE_STATE = DATA_COMPONENTS.registerComponentType("catalyst_crystal_charge_state", builder -> builder
+            .persistent(Codec.BOOL)
+            .networkSynchronized(ByteBufCodecs.BOOL)
+            .cacheEncoding()
+    );
 }

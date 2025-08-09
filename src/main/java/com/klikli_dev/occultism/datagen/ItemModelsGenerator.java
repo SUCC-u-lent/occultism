@@ -223,7 +223,8 @@ public class ItemModelsGenerator extends ItemModelProvider {
                 this.name(OccultismItems.STORAGE_REMOTE_INERT.get()),
                 this.name(OccultismItems.TABOO_BOOK.get()),
                 this.name(OccultismItems.TALLOW.get()),
-                this.name(OccultismItems.WITHERITE_DUST.get())
+                this.name(OccultismItems.WITHERITE_DUST.get()),
+                this.name(OccultismItems.CATALYST_CRYSTAL_ITEM.get())
         };
         for (String item : items){
             this.registerItemGenerated(item, item);

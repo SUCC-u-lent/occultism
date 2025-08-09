@@ -1266,6 +1266,21 @@ public abstract class RitualRecipes extends RecipeProvider {
                 ).unlockedBy("has_bound_djinni", has(OccultismItems.BOOK_OF_BINDING_BOUND_DJINNI.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Occultism.MODID, "ritual/craft_soul_gem"));
         RitualRecipeBuilder.ritualRecipeBuilder(Ingredient.of(OccultismItems.BOOK_OF_BINDING_BOUND_DJINNI.get()),
+                        new ItemStack(OccultismItems.CATALYST_CRYSTAL_ITEM.get()),
+                        makeRitualDummy(OccultismItems.RITUAL_DUMMY_CRAFT_CATALYST_CRYSTAL.get()),
+                        150,
+                        RITUAL_CRAFT,
+                        PENTACLE_CRAFT_DJINNI,
+                        Ingredient.of(OccultismItems.FRAGILE_SOUL_GEM_ITEM),
+                        Ingredient.of(OccultismItems.FRAGILE_SOUL_GEM_ITEM),
+                        Ingredient.of(Tags.Items.GEMS_LAPIS),
+                        Ingredient.of(Tags.Items.GEMS_LAPIS),
+                        Ingredient.of(ItemTags.SOUL_FIRE_BASE_BLOCKS),
+                        Ingredient.of(ItemTags.SOUL_FIRE_BASE_BLOCKS),
+                        Ingredient.of(ItemTags.SOUL_FIRE_BASE_BLOCKS)
+                ).unlockedBy("has_bound_djinni", has(OccultismItems.BOOK_OF_BINDING_BOUND_DJINNI.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Occultism.MODID, "ritual/craft_catalyst_crystal"));
+        RitualRecipeBuilder.ritualRecipeBuilder(Ingredient.of(OccultismItems.BOOK_OF_BINDING_BOUND_DJINNI.get()),
                         new ItemStack(OccultismItems.STORAGE_REMOTE.get()),
                         makeRitualDummy(OccultismItems.RITUAL_DUMMY_CRAFT_STORAGE_REMOTE.get()),
                         150,

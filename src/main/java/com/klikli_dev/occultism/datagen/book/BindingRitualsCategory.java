@@ -126,6 +126,11 @@ public class BindingRitualsCategory extends CategoryProvider {
         var craftSoulGem = this.add(this.makeCraftSoulGemEntry(this.entryMap, 'h'));
         craftSoulGem.withParent(BookEntryParentModel.create(craftFragileSoulGem.getId()))
                 .withCondition(BookEntryReadConditionModel.create().withEntry(craftDjinniID));
+
+        var craftCatalystCrystal = this.add(this.makeCraftCatalystCrystalEntry(this.entryMap, 'η'));
+        craftCatalystCrystal.withParent(BookEntryParentModel.create(craftFragileSoulGem.getId()))
+                .withCondition(BookEntryReadConditionModel.create().withEntry(craftDjinniID));
+
         var craftFamiliarRing = this.add(this.makeCraftFamiliarRingEntry(this.entryMap, 'c'));
         craftFamiliarRing.withParent(BookEntryParentModel.create(craftSoulGem.getId()));
         var craftTrinityGem = this.add(new TrinityGemEntry(this).generate('Ť'));
@@ -581,6 +586,32 @@ public class BindingRitualsCategory extends CategoryProvider {
 
         return BookEntryModel.create(this.modLoc(this.context().categoryId() + "/" + this.context().entryId()), this.context().entryName())
                 .withIcon(OccultismItems.SOUL_GEM_ITEM.get())
+                .withLocation(entryMap.get(icon))
+                .withPages(
+                        spotlight,
+                        ritual,
+                        usage
+                );
+    }
+    private BookEntryModel makeCraftCatalystCrystalEntry(CategoryEntryMap entryMap, char icon) {
+        this.context().entry("craft_catalyst_crystal");
+
+        this.context().page("spotlight");
+        var spotlight = BookSpotlightPageModel.create()
+                .withItem(Ingredient.of(OccultismItems.CATALYST_CRYSTAL_ITEM.get()))
+                .withText(this.context().pageText());
+
+        this.context().page("ritual");
+        var ritual = BookRitualRecipePageModel.create()
+                .withRecipeId1(this.modLoc("ritual/craft_catalyst_crystal"));
+
+        this.context().page("usage");
+        var usage = BookTextPageModel.create()
+                .withTitle(this.context().pageTitle())
+                .withText(this.context().pageText());
+
+        return BookEntryModel.create(this.modLoc(this.context().categoryId() + "/" + this.context().entryId()), this.context().entryName())
+                .withIcon(OccultismItems.CATALYST_CRYSTAL_ITEM.get())
                 .withLocation(entryMap.get(icon))
                 .withPages(
                         spotlight,

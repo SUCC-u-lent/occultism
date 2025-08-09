@@ -2,6 +2,7 @@ package com.klikli_dev.occultism.common.entity.spirit.demonicpartner.wife;
 
 import com.klikli_dev.occultism.Occultism;
 import com.klikli_dev.occultism.common.entity.spirit.demonicpartner.DemonicPartner;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -46,8 +47,11 @@ public class DemonicWife extends DemonicPartner implements GeoEntity {
             return tAnimationState.setAndContinue(RawAnimation.begin().thenPlay("attack"));
         }
 
-        if (this.isInSittingPose())
+        if (this.isInSittingPose()){
+            if (!this.getMainHandItem().getComponents().has(DataComponents.TOOL) && !this.getMainHandItem().isEmpty())
+                return tAnimationState.setAndContinue(RawAnimation.begin().thenPlay("use_item"));
             return tAnimationState.setAndContinue(RawAnimation.begin().thenPlay("sit"));
+        }
 
         if (this.isLying())
             return tAnimationState.setAndContinue(RawAnimation.begin().thenPlay("lies"));

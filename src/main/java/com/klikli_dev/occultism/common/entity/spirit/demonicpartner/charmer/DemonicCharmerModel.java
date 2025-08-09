@@ -69,22 +69,35 @@ public class DemonicCharmerModel extends DefaultedGeoModel<DemonicCharmer> {
             GeoBone bone = processor.getBone(variantName);
             bone.setHidden(i!=hornVariant);
         }
-        boolean isFullPower = animatable.getEntityData().get(DemonicCharmer.IS_FULL_POWER);
-        if (!isFullPower){
-            float scaleFactor = 0.25f;
-            GeoBone root = processor.getBone("_"); // Root of the model
+        float powerLevel = animatable.getEntityData().get(DemonicCharmer.POWER_LEVEL);
+
+        if (powerLevel > -2) {
+            float maxHeadScale = 3f;
+            float minHeadScale = 1f;
+            float baseScale = 0.25f;
+            float scaleFactor;
+            if (powerLevel <= -1) {
+                scaleFactor = baseScale;
+            } else {
+                float normalizedPower = (powerLevel - (-1)) / (animatable.getMaxHealth() - (-1));
+                normalizedPower = Math.clamp(normalizedPower, 0f, 1f);
+                scaleFactor = baseScale + normalizedPower * (1f - baseScale);
+            }
+
+            GeoBone root = processor.getBone("_");
             if (root != null) {
                 root.setScaleX(scaleFactor);
                 root.setScaleY(scaleFactor);
                 root.setScaleZ(scaleFactor);
-                root.setPivotY(24); // Lift the model slightly if small
+                root.setPivotY(12);
             }
+
             GeoBone headBone = processor.getBone("head");
-            if (headBone != null)
-            {
-                headBone.setScaleX(3-scaleFactor);
-                headBone.setScaleY(3-scaleFactor);
-                headBone.setScaleZ(3-scaleFactor);
+            if (headBone != null) {
+                float headScale = maxHeadScale - ((scaleFactor - baseScale) * (maxHeadScale - minHeadScale) / (1f - baseScale));
+                headBone.setScaleX(headScale);
+                headBone.setScaleY(headScale);
+                headBone.setScaleZ(headScale);
             }
         }
     }

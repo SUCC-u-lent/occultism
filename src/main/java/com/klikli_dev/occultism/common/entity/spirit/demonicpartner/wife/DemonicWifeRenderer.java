@@ -22,12 +22,52 @@
 
 package com.klikli_dev.occultism.common.entity.spirit.demonicpartner.wife;
 
+import com.klikli_dev.occultism.Occultism;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import org.joml.Quaternionf;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class DemonicWifeRenderer extends GeoEntityRenderer<DemonicWife> {
 
     public DemonicWifeRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new DemonicWifeModel());
+    }
+
+    @Override
+    public void applyRenderLayersForBone(PoseStack poseStack, DemonicWife animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+        super.applyRenderLayersForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+
+        if ("body".equals(bone.getName())) { //This renderer allows any hand item to render in the hand floating in front of the torso... basically like how a piglin will hold gold in their hands
+            ItemStack heldItem = animatable.getMainHandItem();
+
+            if (!heldItem.isEmpty() && animatable.isInSittingPose()) {
+                poseStack.pushPose();
+                poseStack.translate(0,bone.getScaleY() * 1.2, -bone.getScaleZ()/2);
+
+                Minecraft.getInstance().getItemRenderer().renderStatic(
+                        animatable,
+                        heldItem,
+                        ItemDisplayContext.GROUND,
+                        false,
+                        poseStack,
+                        bufferSource,
+                        animatable.level(),
+                        packedLight,
+                        packedOverlay,
+                        animatable.getId()
+                );
+
+                poseStack.popPose();
+            }
+        }
     }
 }

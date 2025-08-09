@@ -23,10 +23,15 @@
 package com.klikli_dev.occultism.handlers;
 
 import com.klikli_dev.occultism.Occultism;
+import com.klikli_dev.occultism.common.entity.spirit.demonicpartner.charmer.DemonicCharmer;
 import com.klikli_dev.occultism.registry.OccultismCommands;
 import com.klikli_dev.occultism.registry.OccultismEffects;
 import com.klikli_dev.occultism.registry.OccultismItems;
 import com.klikli_dev.occultism.registry.OccultismPotions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
@@ -35,10 +40,35 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 
 @EventBusSubscriber(modid = Occultism.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ForgeEventHandler {
 
+    @SubscribeEvent
+    public static void onSetAttackTarget(LivingChangeTargetEvent event){
+        LivingEntity attacker = event.getEntity();
+        LivingEntity newTarget = event.getNewAboutToBeSetTarget();
+
+        // Only care about monsters targeting players
+        if (!(attacker instanceof Monster)) return;
+        if (!(newTarget instanceof Player)) return;
+
+        // Check if any Demonic Charmer nearby that has this player as owner
+        boolean isProtected = attacker.level().getEntitiesOfClass(
+                DemonicCharmer.class,
+                newTarget.getBoundingBox().inflate(10)
+        ).stream().anyMatch(demonicCharmer -> {
+            // Assuming DemonicCharmer has a method getOwner() returning Player or null
+            LivingEntity owner = demonicCharmer.getOwner();
+            return owner != null && owner.equals(newTarget);
+        });
+
+        if (isProtected) {
+            // Cancel targeting the player if owner is nearby Demonic Charmer
+            event.setNewAboutToBeSetTarget(null);
+        }
+    }
     //region Static Methods
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {

@@ -32,7 +32,7 @@ public class BookBindingCraftingRecipePageModel extends BookRecipePageModel<Book
 
     @Override
     public JsonObject toJson(ResourceLocation entryId, HolderLookup.Provider provider) {
-        JsonObject json = super.toJson(entryId, provider);
+        var json = super.toJson(entryId, provider);
         json.add("unbound_book", ItemStack.STRICT_CODEC
                 .encodeStart(provider.createSerializationContext(JsonOps.INSTANCE), this.unboundBook)
                 .getOrThrow()

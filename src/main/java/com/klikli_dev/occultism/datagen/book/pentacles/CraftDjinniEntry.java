@@ -48,6 +48,8 @@ public class CraftDjinniEntry extends EntryProvider {
         this.pageText("""
                 - [Infused Pickaxe](entry://crafting_rituals/craft_infused_pickaxe)
                 - [Soul Gem](entry://crafting_rituals/craft_soul_gem)
+                - [Catalyst Crystal](entry://crafting_rituals/craft_catalyst_crystal)
+                - [Enhance Demonic Charmer](entry://crafting_rituals/enhance_demonic_charmer)
                 - [Familiar Ring](entry://crafting_rituals/craft_familiar_ring)
                 - [Dimensional Matrix](entry://crafting_rituals/craft_dimensional_matrix)
                 - [Storage Accessor](entry://crafting_rituals/craft_storage_remote)
