@@ -51,6 +51,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -477,12 +481,25 @@ public abstract class SpiritEntity extends TamableAnimal implements ISkinnedCrea
     }
 
     @Override
+    public boolean addEffect(MobEffectInstance effectInstance, @org.jetbrains.annotations.Nullable Entity entity) {
+        if (effectInstance.getEffect().value().getCategory() == MobEffectCategory.HARMFUL
+                && this.getOwner() != null
+                && entity != null
+                && this.getOwner().is(entity)) {
+            return false;
+        }
+        return super.addEffect(effectInstance, entity);
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
+        Entity entity = source.getEntity();
+        if (this.getOwner() != null && entity != null && this.getOwner().is(entity))
+            return false;
         if (this.isInvulnerableTo(source)) {
             return false;
         } else {
             //copied from wolf
-            Entity entity = source.getEntity();
             if (entity != null && !(entity instanceof Player) && !(entity instanceof AbstractArrow)) {
                 amount = (amount + 1.0F) / 2.0F;
             }

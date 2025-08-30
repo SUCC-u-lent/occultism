@@ -15,11 +15,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -94,6 +93,25 @@ public class DemonicPartner extends TamableAnimal {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(IS_LYING, false);
+    }
+
+    @Override
+    public boolean addEffect(MobEffectInstance effectInstance, @org.jetbrains.annotations.Nullable Entity entity) {
+        if (effectInstance.getEffect().value().getCategory() == MobEffectCategory.HARMFUL
+                && this.getOwner() != null
+                && entity != null
+                && this.getOwner().is(entity)) {
+            return false;
+        }
+        return super.addEffect(effectInstance, entity);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        Entity entity = source.getEntity();
+        if (this.getOwner() != null && entity != null && this.getOwner().is(entity))
+            return false;
+        return super.hurt(source, amount);
     }
 
     public boolean isLying() {
